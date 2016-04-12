@@ -41,20 +41,20 @@ module scenes {
         private livesLabel: createjs.Text;
         private scoreValue: number;
         private livesValue: number;
+        
+        private platformGeometry:CubeGeometry;
+        private platformMaterial: Physijs.Material;
 
         private platform1: Physijs.Mesh;
         private platform2: Physijs.Mesh;
         private platform3: Physijs.Mesh;
         private platform4: Physijs.Mesh;
         private platform5: Physijs.Mesh;
-
-        private hazardGeometry: CubeGeometry;
-        private hazardMaterial: Physijs.Material;
-        private hazard1: Physijs.Mesh;
-        private hazard2: Physijs.Mesh;
-        private hazard3: Physijs.Mesh;
-        private hazard4: Physijs.Mesh;
-        private hazard5: Physijs.Mesh;
+        private platform6: Physijs.Mesh;
+        private platform7: Physijs.Mesh;
+        private platform8: Physijs.Mesh;
+        private platform9: Physijs.Mesh;
+        private platform10: Physijs.Mesh;
 
         private goalGeometry: CubeGeometry;
         private goalMaterial: Physijs.Material;
@@ -187,7 +187,7 @@ module scenes {
             this.groundMaterial.bumpMap = this.groundTextureNormal;
             this.groundMaterial.bumpScale = 0.2;
 
-            this.groundGeometry = new BoxGeometry(32, 1, 32);
+            this.groundGeometry = new BoxGeometry(10, 1, 10);
             this.groundPhysicsMaterial = Physijs.createMaterial(this.groundMaterial, 0, 0);
             this.ground = new Physijs.ConvexMesh(this.groundGeometry, this.groundPhysicsMaterial, 0);
             this.ground.receiveShadow = true;
@@ -233,17 +233,50 @@ module scenes {
         }
         
         //add maze and hazards to level
-        private addMaze(): void {
+        private addLevel(): void {
             //add level 2 horizonatal platformer
+            this.platformGeometry = new BoxGeometry(10, 1, 10);
+            this.platformMaterial = Physijs.createMaterial(new LambertMaterial({ color: 0xff00ff }), 0, 0);
             
+            //platform 1 closest to start platform
+            this.platform1 = new Physijs.BoxMesh(this.platformGeometry,this.platformMaterial,0);
+            this.platform1.position.set(15,0,0);
             
+            this.platform2 = new Physijs.BoxMesh(this.platformGeometry,this.platformMaterial,0);
+            this.platform2.position.set(25,0,0);
             
+            this.platform3 = new Physijs.BoxMesh(this.platformGeometry,this.platformMaterial,0);
+            this.platform3.position.set(35,0,0);
             
+            this.platform4 = new Physijs.BoxMesh(this.platformGeometry,this.platformMaterial,0);
+            this.platform4.position.set(45,0,0);
+            
+            this.platform5 = new Physijs.BoxMesh(this.platformGeometry,this.platformMaterial,0);
+            this.platform5.position.set(55,0,0);
+            
+            this.platform6 = new Physijs.BoxMesh(this.platformGeometry,this.platformMaterial,0);
+            this.platform6.position.set(65,0,0);
+            
+            this.platform7 = new Physijs.BoxMesh(this.platformGeometry,this.platformMaterial,0);
+            this.platform7.position.set(75,0,0);
+            
+            this.platform8 = new Physijs.BoxMesh(this.platformGeometry,this.platformMaterial,0);
+            this.platform8.position.set(85,0,0);
+            
+            this.platform9 = new Physijs.BoxMesh(this.platformGeometry,this.platformMaterial,0);
+            this.platform9.position.set(95,0,0);
+                   
+            //platform 10 end platform
+            this.platform10 = new Physijs.BoxMesh(this.platformGeometry,this.platformMaterial,0);
+            this.platform10.position.set(105,0,0);
+                
             //End Goal - move to new location
             this.goalGeometry = new BoxGeometry(4, 1, 4);
             this.goalMaterial = Physijs.createMaterial(new LambertMaterial({ color: 0xff0000 }), 0, 0);
             this.goal = new Physijs.BoxMesh(this.goalGeometry, this.goalMaterial, 0);
-            this.goal.position.set(15, 1, -15);
+            
+            //change this to end platform location
+            this.goal.position.set(105,0,0);
             this.goal.name = "goal";
             this.add(this.goal);
 
@@ -411,7 +444,7 @@ module scenes {
             this.addGround();
             
             //Add actual maze to level
-            this.addMaze();
+            this.addLevel();
 
             // Add player controller
             this.addPlayer();
@@ -444,9 +477,8 @@ module scenes {
 
                 if (eventObject.name === "goal") {
                     console.log("Hit goal");
-                    scene.remove(this.player);
-                    this.player.position.set(0, 5, 10);
-                    scene.add(this.player);
+                    currentScene = config.Scene.LEVEL3;
+                    changeScene();
                 }
             }.bind(this));
 

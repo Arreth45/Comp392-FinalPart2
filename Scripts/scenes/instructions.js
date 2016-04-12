@@ -93,8 +93,7 @@ var scenes;
             this._stage.update();
         };
         return Instructions;
-    }(scenes.Scene));
+    })(scenes.Scene);
     scenes.Instructions = Instructions;
 })(scenes || (scenes = {}));
-
 //# sourceMappingURL=instructions.js.map

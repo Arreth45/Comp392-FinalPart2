@@ -11,22 +11,22 @@ var __extends = (this && this.__extends) || function (d, b) {
 var scenes;
 (function (scenes) {
     /**
-     * The Play class is where the main action occurs for the game
+     * The Level 3 class is where the main action occurs for the game
      *
-     * @class Play
+     * @class Level3
      */
-    var Play = (function (_super) {
-        __extends(Play, _super);
+    var Level3 = (function (_super) {
+        __extends(Level3, _super);
         /**
          * @constructor
          */
-        function Play() {
+        function Level3() {
             _super.call(this);
             this._initialize();
             this.start();
         }
         // PRIVATE METHODS ++++++++++++++++++++++++++++++++++++++++++
-        Play.prototype._setupCanvas = function () {
+        Level3.prototype._setupCanvas = function () {
             canvas.setAttribute("width", config.Screen.WIDTH.toString());
             canvas.setAttribute("height", (config.Screen.HEIGHT * 0.1).toString());
             canvas.style.backgroundColor = "#000000";
@@ -37,7 +37,7 @@ var scenes;
          * @method _initialize
          * @returns void
          */
-        Play.prototype._initialize = function () {
+        Level3.prototype._initialize = function () {
             this.blocker = document.getElementById("blocker");
             this.blocker.style.display = "block";
             //setup canvas
@@ -57,7 +57,7 @@ var scenes;
          * @method setupScoreboard
          * @returns void
          */
-        Play.prototype.setupScoreboard = function () {
+        Level3.prototype.setupScoreboard = function () {
             // initialize  score and lives values
             this.scoreValue = 0;
             this.livesValue = 5;
@@ -80,7 +80,7 @@ var scenes;
          * @method addSpotLight
          * @return void
          */
-        Play.prototype.addSpotLight = function () {
+        Level3.prototype.addSpotLight = function () {
             // Spot Light
             this.spotLight = new SpotLight(0xffffff);
             this.spotLight.position.set(20, 40, -15);
@@ -106,7 +106,7 @@ var scenes;
          * @method addGround
          * @return void
          */
-        Play.prototype.addGround = function () {
+        Level3.prototype.addGround = function () {
             this.groundTexture = new THREE.TextureLoader().load('../../Assets/images/GravelCobble.jpg');
             this.groundTexture.wrapS = THREE.RepeatWrapping;
             this.groundTexture.wrapT = THREE.RepeatWrapping;
@@ -119,7 +119,7 @@ var scenes;
             this.groundMaterial.map = this.groundTexture;
             this.groundMaterial.bumpMap = this.groundTextureNormal;
             this.groundMaterial.bumpScale = 0.2;
-            this.groundGeometry = new BoxGeometry(32, 1, 32);
+            this.groundGeometry = new BoxGeometry(10, 1, 10);
             this.groundPhysicsMaterial = Physijs.createMaterial(this.groundMaterial, 0, 0);
             this.ground = new Physijs.ConvexMesh(this.groundGeometry, this.groundPhysicsMaterial, 0);
             this.ground.receiveShadow = true;
@@ -133,12 +133,12 @@ var scenes;
          * @method addPlayer
          * @return void
          */
-        Play.prototype.addPlayer = function () {
+        Level3.prototype.addPlayer = function () {
             // Player Object
             this.playerGeometry = new BoxGeometry(2, 4, 2);
             this.playerMaterial = Physijs.createMaterial(new LambertMaterial({ color: 0x00ff00 }), 0.4, 0);
             this.player = new Physijs.BoxMesh(this.playerGeometry, this.playerMaterial, 1);
-            this.player.position.set(0, 5, 10);
+            this.player.position.set(0, 30, 10);
             this.player.receiveShadow = true;
             this.player.castShadow = true;
             this.player.name = "Player";
@@ -151,7 +151,7 @@ var scenes;
          * @method addDeathPlane
          * @return void
          */
-        Play.prototype.addDeathPlane = function () {
+        Level3.prototype.addDeathPlane = function () {
             this.deathPlaneGeometry = new BoxGeometry(100, 1, 100);
             this.deathPlaneMaterial = Physijs.createMaterial(new MeshBasicMaterial({ color: 0xff0000 }), 0.4, 0.6);
             this.deathPlane = new Physijs.BoxMesh(this.deathPlaneGeometry, this.deathPlaneMaterial, 0);
@@ -160,98 +160,39 @@ var scenes;
             this.add(this.deathPlane);
         };
         //add maze and hazards to level
-        Play.prototype.addMaze = function () {
-            //Outer Walls
-            console.log("Start add maze");
-            this.wallGeometry = new BoxGeometry(32, 5, 1);
-            this.wallMaterial = Physijs.createMaterial(new LambertMaterial({ color: 0xff00ff }), 0, 0);
-            this.backWall = new Physijs.BoxMesh(this.wallGeometry, this.wallMaterial, 0);
-            this.backWall.position.set(0, 3, -16);
-            this.backWall.receiveShadow = true;
-            this.backWall.name = "wall";
-            this.add(this.backWall);
-            this.wallGeometry = new BoxGeometry(32, 5, 1);
-            this.wallMaterial = Physijs.createMaterial(new LambertMaterial({ color: 0xff00ff }), 0, 0);
-            this.frontWall = new Physijs.BoxMesh(this.wallGeometry, this.wallMaterial, 0);
-            this.frontWall.position.set(0, 3, 16);
-            this.frontWall.receiveShadow = true;
-            this.frontWall.name = "wall";
-            this.add(this.frontWall);
-            this.wallGeometry = new BoxGeometry(1, 5, 32);
-            this.wallMaterial = Physijs.createMaterial(new LambertMaterial({ color: 0xff00ff }), 0, 0);
-            this.rightWall = new Physijs.BoxMesh(this.wallGeometry, this.wallMaterial, 0);
-            this.rightWall.position.set(16, 3, 0);
-            this.rightWall.receiveShadow = true;
-            this.rightWall.name = "wall";
-            this.add(this.rightWall);
-            this.wallGeometry = new BoxGeometry(1, 5, 32);
-            this.wallMaterial = Physijs.createMaterial(new LambertMaterial({ color: 0xff00ff }), 0, 0);
-            this.leftWall = new Physijs.BoxMesh(this.wallGeometry, this.wallMaterial, 0);
-            this.leftWall.position.set(-16, 3, 0);
-            this.leftWall.receiveShadow = true;
-            this.leftWall.name = "wall";
-            this.add(this.leftWall);
-            //Actual Maze
-            this.wallGeometry = new BoxGeometry(16, 5, 1);
-            this.wallMaterial = Physijs.createMaterial(new LambertMaterial({ color: 0xff00ff }), 0, 0);
-            this.wall1 = new Physijs.BoxMesh(this.wallGeometry, this.wallMaterial, 0);
-            this.wall1.position.set(8, 3, -12);
-            this.wall1.receiveShadow = true;
-            this.wall1.name = "wall";
-            this.add(this.wall1);
-            this.wall2 = new Physijs.BoxMesh(this.wallGeometry, this.wallMaterial, 0);
-            this.wall2.position.set(-8, 3, -8);
-            this.wall2.receiveShadow = true;
-            this.wall2.name = "wall";
-            this.add(this.wall2);
-            this.wall3 = new Physijs.BoxMesh(this.wallGeometry, this.wallMaterial, 0);
-            this.wall3.position.set(8, 3, -4);
-            this.wall3.receiveShadow = true;
-            this.wall3.name = "wall";
-            this.add(this.wall3);
-            this.wall4 = new Physijs.BoxMesh(this.wallGeometry, this.wallMaterial, 0);
-            this.wall4.position.set(-8, 3, 0);
-            this.wall4.receiveShadow = true;
-            this.wall4.name = "wall";
-            this.add(this.wall4);
-            this.wall5 = new Physijs.BoxMesh(this.wallGeometry, this.wallMaterial, 0);
-            this.wall5.position.set(8, 3, 4);
-            this.wall5.receiveShadow = true;
-            this.wall5.name = "wall";
-            this.add(this.wall5);
-            //"electric hazards"
-            this.hazardGeometry = new BoxGeometry(1, 2, 8);
-            this.hazardMaterial = Physijs.createMaterial(new LambertMaterial({ color: 0xffff00 }), 0, 0);
-            this.hazard1 = new Physijs.BoxMesh(this.hazardGeometry, this.hazardMaterial, 0);
-            this.hazard1.position.set(0.5, 1, -12);
-            this.hazard1.receiveShadow = true;
-            this.hazard1.name = "hazard";
-            this.add(this.hazard1);
-            this.hazard2 = new Physijs.BoxMesh(this.hazardGeometry, this.hazardMaterial, 0);
-            this.hazard2.position.set(0.5, 1, -8);
-            this.hazard2.receiveShadow = true;
-            this.hazard2.name = "hazard";
-            this.add(this.hazard2);
-            this.hazard3 = new Physijs.BoxMesh(this.hazardGeometry, this.hazardMaterial, 0);
-            this.hazard3.position.set(0.5, 1, -4);
-            this.hazard3.receiveShadow = true;
-            this.hazard3.name = "hazard";
-            this.add(this.hazard3);
-            this.hazard4 = new Physijs.BoxMesh(this.hazardGeometry, this.hazardMaterial, 0);
-            this.hazard4.position.set(0.5, 1, 0);
-            this.hazard4.receiveShadow = true;
-            this.hazard4.name = "hazard";
-            this.add(this.hazard4);
-            this.hazard5 = new Physijs.BoxMesh(this.hazardGeometry, this.hazardMaterial, 0);
-            this.hazard5.position.set(0.5, 1, 4);
-            this.hazard5.receiveShadow = true;
-            this.hazard5.name = "hazard";
-            this.add(this.hazard4);
-            //End Goal
+        Level3.prototype.addLevel = function () {
+            //add level 2 horizonatal platformer
+            this.platformGeometry = new BoxGeometry(10, 1, 10);
+            this.platformMaterial = Physijs.createMaterial(new LambertMaterial({ color: 0xff00ff }), 0, 0);
+            //platform 1 closest to start platform
+            //Change to Y increase for vertical platformer
+            this.platform1 = new Physijs.BoxMesh(this.platformGeometry, this.platformMaterial, 0);
+            this.platform1.position.set(0, 15, 0);
+            this.platform2 = new Physijs.BoxMesh(this.platformGeometry, this.platformMaterial, 0);
+            this.platform2.position.set(0, 25, 0);
+            this.platform3 = new Physijs.BoxMesh(this.platformGeometry, this.platformMaterial, 0);
+            this.platform3.position.set(0, 35, 0);
+            this.platform4 = new Physijs.BoxMesh(this.platformGeometry, this.platformMaterial, 0);
+            this.platform4.position.set(0, 45, 0);
+            this.platform5 = new Physijs.BoxMesh(this.platformGeometry, this.platformMaterial, 0);
+            this.platform5.position.set(0, 55, 0);
+            this.platform6 = new Physijs.BoxMesh(this.platformGeometry, this.platformMaterial, 0);
+            this.platform6.position.set(0, 65, 0);
+            this.platform7 = new Physijs.BoxMesh(this.platformGeometry, this.platformMaterial, 0);
+            this.platform7.position.set(0, 75, 0);
+            this.platform8 = new Physijs.BoxMesh(this.platformGeometry, this.platformMaterial, 0);
+            this.platform8.position.set(0, 85, 0);
+            this.platform9 = new Physijs.BoxMesh(this.platformGeometry, this.platformMaterial, 0);
+            this.platform9.position.set(0, 95, 0);
+            //platform 10 end platform
+            this.platform10 = new Physijs.BoxMesh(this.platformGeometry, this.platformMaterial, 0);
+            this.platform10.position.set(0, 105, 0);
+            //End Goal - move to new location
             this.goalGeometry = new BoxGeometry(4, 1, 4);
             this.goalMaterial = Physijs.createMaterial(new LambertMaterial({ color: 0xff0000 }), 0, 0);
             this.goal = new Physijs.BoxMesh(this.goalGeometry, this.goalMaterial, 0);
-            this.goal.position.set(15, 1, -14);
+            //change this to end platform location
+            this.goal.position.set(0, 105, 0);
             this.goal.name = "goal";
             this.add(this.goal);
         };
@@ -261,7 +202,7 @@ var scenes;
          * @method pointerLockChange
          * @return void
          */
-        Play.prototype.pointerLockChange = function (event) {
+        Level3.prototype.pointerLockChange = function (event) {
             if (document.pointerLockElement === this.element) {
                 // enable our mouse and keyboard controls
                 this.keyboardControls.enabled = true;
@@ -285,7 +226,7 @@ var scenes;
          * @method pointerLockError
          * @return void
          */
-        Play.prototype.pointerLockError = function (event) {
+        Level3.prototype.pointerLockError = function (event) {
             this.instructions.style.display = '';
             console.log("PointerLock Error Detected!!");
         };
@@ -296,7 +237,7 @@ var scenes;
          * @method checkControls
          * @return void
          */
-        Play.prototype.checkControls = function () {
+        Level3.prototype.checkControls = function () {
             if (this.keyboardControls.enabled) {
                 this.velocity = new Vector3();
                 var time = performance.now();
@@ -317,7 +258,7 @@ var scenes;
                     }
                     if (this.keyboardControls.jump) {
                         this.velocity.y += 4000.0 * delta;
-                        if (this.player.position.y > 6) {
+                        if (this.player.position.y > 4) {
                             this.isGrounded = false;
                             createjs.Sound.play("jump");
                         }
@@ -348,7 +289,7 @@ var scenes;
          * @method start
          * @return void
          */
-        Play.prototype.start = function () {
+        Level3.prototype.start = function () {
             var _this = this;
             // Create to HTMLElements
             //this.blocker = document.getElementById("blocker");
@@ -389,7 +330,7 @@ var scenes;
             // Ground Object
             this.addGround();
             //Add actual maze to level
-            this.addMaze();
+            this.addLevel();
             // Add player controller
             this.addPlayer();
             // Add death plane to the scene
@@ -409,12 +350,12 @@ var scenes;
                     this.add(this.player);
                 }
                 if (eventObject.name === "hazard") {
-                    this.livesValue--;
-                    this.livesLabel.text = "Lives: " + this.livesValue;
+                    this.livesValue -= 1;
+                    this.liveslabel.text = "Lives: " + this.livesValue;
                 }
                 if (eventObject.name === "goal") {
                     console.log("Hit goal");
-                    currentScene = config.Scene.LEVEL2;
+                    currentScene = config.Scene.OVER;
                     changeScene();
                 }
             }.bind(this));
@@ -429,7 +370,7 @@ var scenes;
          * @method cameraLook
          * @return void
          */
-        Play.prototype.cameraLook = function () {
+        Level3.prototype.cameraLook = function () {
             var zenith = THREE.Math.degToRad(90);
             var nadir = THREE.Math.degToRad(-90);
             var cameraPitch = camera.rotation.x + this.mouseControls.pitch;
@@ -440,7 +381,7 @@ var scenes;
          * @method update
          * @returns void
          */
-        Play.prototype.update = function () {
+        Level3.prototype.update = function () {
             this.checkControls();
             this.stage.update();
         };
@@ -450,7 +391,7 @@ var scenes;
          * @method resize
          * @return void
          */
-        Play.prototype.resize = function () {
+        Level3.prototype.resize = function () {
             canvas.style.width = "100%";
             this.livesLabel.x = config.Screen.WIDTH * 0.1;
             this.livesLabel.y = (config.Screen.HEIGHT * 0.15) * 0.20;
@@ -458,8 +399,8 @@ var scenes;
             this.scoreLabel.y = (config.Screen.HEIGHT * 0.15) * 0.20;
             this.stage.update();
         };
-        return Play;
+        return Level3;
     })(scenes.Scene);
-    scenes.Play = Play;
+    scenes.Level3 = Level3;
 })(scenes || (scenes = {}));
-//# sourceMappingURL=play.js.map
+//# sourceMappingURL=level3.js.map

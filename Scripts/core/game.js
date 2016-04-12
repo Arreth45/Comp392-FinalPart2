@@ -39,6 +39,8 @@ var play;
 var menu;
 var instructions;
 var level2;
+var level3;
+var over;
 var stats;
 var canvas;
 var assets;
@@ -144,20 +146,22 @@ function changeScene() {
             console.log("Starting Level 1 Scene");
             break;
         case config.Scene.OVER:
-            // show the game OVER scene
-            /*
+            // show the game OVER scene      
             over = new scenes.Over();
             scene = over;
             console.log("Starting OVER Scene");
-            */
             break;
         case config.Scene.LEVEL2:
             level2 = new scenes.Level2();
             scene = level2;
             console.log("Starting Level 2 Scene");
             break;
+        case config.Scene.LEVEL3:
+            level3 = new scenes.Level3();
+            scene = level3;
+            console.log("Starting Level 3 Scene");
+            break;
     }
 }
 window.onload = preload;
-
 //# sourceMappingURL=game.js.map

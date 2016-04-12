@@ -130,8 +130,7 @@ var scenes;
             this._stage.update();
         };
         return Menu;
-    }(scenes.Scene));
+    })(scenes.Scene);
     scenes.Menu = Menu;
 })(scenes || (scenes = {}));
-
 //# sourceMappingURL=menu.js.map
